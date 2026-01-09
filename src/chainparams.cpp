@@ -160,14 +160,17 @@ public:
                 {240000, uint256S("0x0f16c1a0d4b376d141bd5a87fa3df782f469e69a435e6d17cd05c6275797f8a3")},
                 {383640, uint256S("0x5f5b591b20fa8701f987457bec0ae0e98125b1d8b73e624cbba371db7d10f3f3")},
                 {409004, uint256S("0x4dd357e42bab4a6ffbb763f91fb5885fd85ba1187a1385bcf030030df05735d6")},
+                {456000, uint256S("0xd31bd54f4c856cccb1edb8588ad6748b02e7de3a7bdc0340a2ab2ab31100e011")},
+                {638902, uint256S("0xdc0a1fbe223f4bd64c51cef0dcd10dabe11e4a7370b433e7942f7ad2fcb94447")},
+                {721000, uint256S("0x9623f4c4e3277eeecf7575d2dff3348b453395a489ce5888dcfe939a92bcf04d")},
             }
         };
 
         chainTxData = ChainTxData{
-            // Data from rpc: getchaintxstats 4096 62e2e3d21343a00994d38a63524867507dbeee6850e8fbf02e9c47a3ccf82f24
-            /* nTime    */ 1641142661,
-            /* nTxCount */ 100225898,
-            /* dTxRate  */ 1.17733189266096
+            // DEFCOIN: Data from rpc: getchaintxstats
+            /* nTime    */ 1551355823,  // Last checkpoint time
+            /* nTxCount */ 798434,      // Approximate tx count at checkpoint
+            /* dTxRate  */ 0.01         // Transactions per second
         };
     }
 };
@@ -214,11 +217,11 @@ public:
         consensus.nMinimumChainWork = uint256S("0x000000000000000000000000000000000000000000000000004260a1758f04aa");
         consensus.defaultAssumeValid = uint256S("0x4a280c0e150e3b74ebe19618e6394548c8a39d5549fd9941b9c431c73822fbd5"); // 1737876
 
-        pchMessageStart[0] = 0xfd;
-        pchMessageStart[1] = 0xd2;
-        pchMessageStart[2] = 0xc8;
-        pchMessageStart[3] = 0xf1;
-        nDefaultPort = 19335;
+        pchMessageStart[0] = 0xfc;  // DEFCOIN testnet
+        pchMessageStart[1] = 0xc1;
+        pchMessageStart[2] = 0xb7;
+        pchMessageStart[3] = 0xdc;
+        nDefaultPort = 31337;  // DEFCOIN testnet
         nPruneAfterHeight = 1000;
         m_assumed_blockchain_size = 4;
         m_assumed_chain_state_size = 1;
