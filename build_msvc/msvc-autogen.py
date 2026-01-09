@@ -80,7 +80,10 @@ def main():
                 vcxproj_file.write(vcxproj_in_file.read().replace(
                     '@SOURCE_FILES@\n', content))
     copyfile(os.path.join(SOURCE_DIR,'../build_msvc/bitcoin_config.h'), os.path.join(SOURCE_DIR, 'config/bitcoin-config.h'))
-    copyfile(os.path.join(SOURCE_DIR,'../build_msvc/libsecp256k1_config.h'), os.path.join(SOURCE_DIR, 'secp256k1/src/libsecp256k1-config.h'))
+    # Litecoin uses secp256k1-zkp instead of secp256k1
+    secp_dest = os.path.join(SOURCE_DIR, 'secp256k1-zkp/src/libsecp256k1-config.h')
+    os.makedirs(os.path.dirname(secp_dest), exist_ok=True)
+    copyfile(os.path.join(SOURCE_DIR,'../build_msvc/libsecp256k1_config.h'), secp_dest)
 
 if __name__ == '__main__':
     main()
