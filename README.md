@@ -1,7 +1,7 @@
 Defcoin Core 2.0.0
 ==================
 
-[![Build Status](https://github.com/packetloss404/defcoinv2/actions/workflows/build.yml/badge.svg)](https://github.com/packetloss404/defcoinv2/actions)
+[![Build Status](https://github.com/packetloss404/defcoin/actions/workflows/build.yml/badge.svg)](https://github.com/packetloss404/defcoin/actions)
 
 https://defcoin-ng.org
 
@@ -22,6 +22,44 @@ Defcoin Core is the reference implementation that enables the use of this curren
 
 For more information, visit the [Defcoin website](https://defcoin-ng.org) or the
 [original repository](https://github.com/mspicer/defcoin).
+
+What's New in Defcoin Core 2.0.0
+---------------------------------
+
+Defcoin Core 2.0.0 is a major upgrade rebased from Litecoin 0.15.x to Litecoin 0.21.x, bringing 3+ years of improvements while preserving all Defcoin consensus rules.
+
+### Performance & Efficiency
+- **Faster sync**: Improved block download and validation
+- **Reduced memory usage**: Better memory management and caching
+- **Compact block relay**: Faster block propagation across the network
+
+### Security Fixes
+- Fixes for CVE-2023-33297 and CVE-2024-35202
+- Improved peer connection handling
+- Better DoS protection
+
+### Wallet Improvements
+- **Descriptor wallets**: Modern wallet architecture (optional)
+- **Native SegWit by default**: Lower fees with bech32 addresses (dfc1...)
+- **Improved coin selection**: Smarter UTXO management
+- **Hardware wallet support**: Better integration with external signers
+
+### Network & Protocol
+- **Updated P2P protocol**: More efficient peer communication
+- **Improved Tor support**: Better privacy options
+- **BIP155 (addrv2)**: Support for next-gen network addresses
+
+### Developer Features
+- **Updated RPC API**: New commands and improved responses
+- **Better logging**: More detailed debug information
+- **Modern C++17 codebase**: Easier to maintain and extend
+
+### What Stayed the Same
+- **Scrypt proof-of-work**: Same mining algorithm
+- **2-minute block time**: No change to block schedule
+- **720-block difficulty retarget**: Same adjustment period
+- **All consensus rules**: 100% compatible with existing chain
+- **Wallet compatibility**: Your wallet.dat works without changes
 
 Upgrading from Defcoin Core 1.x
 -------------------------------
@@ -87,8 +125,8 @@ The `main` branch contains the latest stable release. Development happens in
 feature branches.
 
 - Original Defcoin: https://github.com/mspicer/defcoin
-- Defcoin 2.0: https://github.com/packetloss404/defcoinv2
-- Issues: https://github.com/packetloss404/defcoinv2/issues
+- Defcoin 2.0: https://github.com/packetloss404/defcoin
+- Issues: https://github.com/packetloss404/defcoin/issues
 
 Testing
 -------
