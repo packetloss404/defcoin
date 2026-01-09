@@ -3,7 +3,7 @@ Defcoin Core 2.0.0
 
 [![Build Status](https://github.com/packetloss404/defcoin/actions/workflows/build.yml/badge.svg)](https://github.com/packetloss404/defcoin/actions)
 
-https://defcoin-ng.org
+https://www.defcoin.io
 
 What is Defcoin?
 ----------------
@@ -22,6 +22,12 @@ Defcoin Core is the reference implementation that enables the use of this curren
 
 For more information, visit the [Defcoin website](https://defcoin-ng.org) or the
 [original repository](https://github.com/mspicer/defcoin).
+
+Defcoin Tools
+---------------------------------
+
+https://explorer.defcoin.io
+https://pool.defcoin.io
 
 What's New in Defcoin Core 2.0.0
 ---------------------------------
@@ -80,8 +86,7 @@ Defcoin Core 2.0.0 is a major upgrade based on Litecoin 0.21.x. To upgrade:
 License
 -------
 
-Defcoin Core is released under the terms of the MIT license. See [COPYING](COPYING) for more
-information or see https://opensource.org/licenses/MIT.
+Defcoin Core is released under the terms of the MIT license. See https://opensource.org/licenses/MIT.
 
 Building
 --------
