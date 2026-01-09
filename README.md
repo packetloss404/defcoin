@@ -20,14 +20,14 @@ block times and a simple, predictable monetary policy.
 
 Defcoin Core is the reference implementation that enables the use of this currency.
 
-For more information, visit the [Defcoin website](https://defcoin-ng.org) or the
+For more information, visit the [Defcoin website](https://www.defcoin.io) or the
 [original repository](https://github.com/mspicer/defcoin).
 
 Defcoin Tools
 ---------------------------------
 
-https://explorer.defcoin.io
-https://pool.defcoin.io
+- **https://explorer.defcoin.io**
+- **https://pool.defcoin.io**
 
 What's New in Defcoin Core 2.0.0
 ---------------------------------
