@@ -2,17 +2,17 @@
 
 *.exe
 *.pdb
-src/litecoin
-src/litecoind
-src/litecoin-cli
-src/litecoin-gui
-src/litecoin-node
-src/litecoin-tx
-src/litecoin-wallet
+src/defcoin
+src/defcoind
+src/defcoin-cli
+src/defcoin-gui
+src/defcoin-node
+src/defcoin-tx
+src/defcoin-wallet
 src/test/fuzz/*
 !src/test/fuzz/*.*
-src/test/test_litecoin
-src/qt/test/test_litecoin-qt
+src/test/test_defcoin
+src/qt/test/test_defcoin-qt
 
 # autoreconf
 Makefile.in
@@ -51,11 +51,11 @@ src/qt/forms/ui_*.h
 
 src/qt/test/moc*.cpp
 
-src/qt/bitcoin-qt.config
-src/qt/bitcoin-qt.creator
-src/qt/bitcoin-qt.creator.user
-src/qt/bitcoin-qt.files
-src/qt/bitcoin-qt.includes
+src/qt/defcoin-qt.config
+src/qt/defcoin-qt.creator
+src/qt/defcoin-qt.creator.user
+src/qt/defcoin-qt.files
+src/qt/defcoin-qt.includes
 
 .deps
 .dirstamp
@@ -94,8 +94,8 @@ src/qt/bitcoin-qt.includes
 *.qm
 Makefile
 !depends/Makefile
-src/qt/litecoin-qt
-Litecoin-Qt.app
+src/qt/defcoin-qt
+Defcoin-Qt.app
 background.tiff*
 
 # Qt Creator
@@ -103,7 +103,7 @@ Makefile.am.user
 
 # Unit-tests
 Makefile.test
-litecoin-qt_test
+defcoin-qt_test
 
 # Resources cpp
 qrc_*.cpp
@@ -118,7 +118,7 @@ releases
 *.gcno
 *.gcda
 /*.info
-test_litecoin.coverage/
+test_defcoin.coverage/
 total.coverage/
 fuzz.coverage/
 coverage_percent.txt
@@ -137,7 +137,7 @@ test/.mypy_cache/
 
 /doc/doxygen/
 
-libbitcoinconsensus.pc
+libdefcoinconsensus.pc
 contrib/devtools/split-debug.sh
 
 # Output from running db4 installation
