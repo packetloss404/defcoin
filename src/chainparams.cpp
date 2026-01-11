@@ -14,6 +14,7 @@
 #include <versionbitsinfo.h>
 
 #include <assert.h>
+#include <limits>
 
 #include <boost/algorithm/string/classification.hpp>
 #include <boost/algorithm/string/split.hpp>
@@ -67,14 +68,18 @@ public:
         consensus.signet_blocks = false;
         consensus.signet_challenge.clear();
         consensus.nSubsidyHalvingInterval = 840000;
-        consensus.BIP16Height = 218579; // 87afb798a3ad9378fcd56123c81fb31cfd9a8df4719b9774d71730c16315a092 - October 1, 2012
-        consensus.BIP34Height = 828326;
-        consensus.BIP34Hash = uint256S("0x57bae90a3342fac0bae15eb2ac9a8924779984bc301ae67730dfda6df49b203c");
-        consensus.BIP65Height = 1828326; // 57bae90a3342fac0bae15eb2ac9a8924779984bc301ae67730dfda6df49b203c
-        consensus.BIP66Height = 1828326; // 57bae90a3342fac0bae15eb2ac9a8924779984bc301ae67730dfda6df49b203c
-        consensus.CSVHeight = 1828326; // 57bae90a3342fac0bae15eb2ac9a8924779984bc301ae67730dfda6df49b203c
-        consensus.SegwitHeight = 1828326; // 57bae90a3342fac0bae15eb2ac9a8924779984bc301ae67730dfda6df49b203c
-        consensus.MinBIP9WarningHeight = 1836390; // segwit activation height + miner confirmation window
+        // DEFCOIN: BIP heights must match original Defcoin 1.0.1 consensus
+        // Original Defcoin used BIP9 signaling for SegWit/CSV (March 2018 - March 2019)
+        // If miners didn't signal 75% support, these soft forks were NEVER activated
+        // Setting to max int effectively disables height-based enforcement
+        consensus.BIP16Height = 0; // P2SH was active from genesis in Defcoin
+        consensus.BIP34Height = 710000; // DEFCOIN: Reasonable height where BIP34 would have been enforced
+        consensus.BIP34Hash = uint256S("0x0000000000000000000000000000000000000000000000000000000000000000");
+        consensus.BIP65Height = std::numeric_limits<int>::max(); // DEFCOIN: Never activated via BIP9 signaling
+        consensus.BIP66Height = std::numeric_limits<int>::max(); // DEFCOIN: Never activated via BIP9 signaling
+        consensus.CSVHeight = std::numeric_limits<int>::max(); // DEFCOIN: Never activated via BIP9 signaling
+        consensus.SegwitHeight = std::numeric_limits<int>::max(); // DEFCOIN: Never activated via BIP9 signaling
+        consensus.MinBIP9WarningHeight = 0; // No BIP9 warnings needed
         consensus.powLimit = uint256S("00000fffffffffffffffffffffffffffffffffffffffffffffffffffffffffff");
         consensus.nPowTargetTimespan = 1 * 24 * 60 * 60; // 1 day (DEFCOIN: 720 blocks)
         consensus.nPowTargetSpacing = 2 * 60; // 2 minutes (DEFCOIN)
@@ -87,9 +92,10 @@ public:
         consensus.vDeployments[Consensus::DEPLOYMENT_TESTDUMMY].nTimeout = Consensus::BIP9Deployment::NO_TIMEOUT;
 
         // Deployment of Taproot (BIPs 340-342)
+        // DEFCOIN: Taproot disabled - requires SegWit which was never activated
         consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].bit = 2;
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartHeight = 2161152; // End November 2021
-        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeoutHeight = 2370816; // 364 days later
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nStartHeight = std::numeric_limits<int>::max(); // Disabled
+        consensus.vDeployments[Consensus::DEPLOYMENT_TAPROOT].nTimeoutHeight = std::numeric_limits<int>::max(); // Disabled
 
         // Deployment of MWEB (LIP-0002, LIP-0003, and LIP-0004)
         // DEFCOIN: MWEB disabled for v2.0.0, may be enabled in v2.1.0
