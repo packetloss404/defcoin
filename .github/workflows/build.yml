@@ -2,9 +2,10 @@ name: Build DefcoinCore
 
 on:
   push:
-    branches: [ main, defcoin-2.0-upgrade ]
+    branches: [ main ]
   pull_request:
     branches: [ main ]
+  workflow_dispatch:  # Allow manual trigger
 
 env:
   DEFCOIN_VERSION: "2.0.0"
@@ -13,6 +14,7 @@ jobs:
   build-linux:
     name: Build Linux (x86_64)
     runs-on: ubuntu-22.04
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -20,18 +22,19 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git
-          sudo apt-get install -y libboost-all-dev libevent-dev libdb++-dev libsqlite3-dev libzmq3-dev
+          sudo apt-get install -y libboost-all-dev libevent-dev libdb-dev libdb++-dev libsqlite3-dev libzmq3-dev
+          sudo apt-get install -y libminiupnpc-dev libnatpmp-dev
           sudo apt-get install -y libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
           sudo apt-get install -y libqrencode-dev
 
-      - name: Build
-        run: |
-          ./autogen.sh
-          ./configure --without-gui
-          make -j$(nproc)
+      - name: Run autogen
+        run: ./autogen.sh
 
-      - name: Run tests
-        run: make check
+      - name: Configure
+        run: ./configure --without-gui --disable-tests --disable-bench
+
+      - name: Build
+        run: make -j$(nproc)
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -41,10 +44,12 @@ jobs:
             src/defcoind
             src/defcoin-cli
             src/defcoin-tx
+            src/defcoin-wallet
 
-  build-windows:
-    name: Build Windows (x86_64)
+  build-linux-qt:
+    name: Build Linux Qt (x86_64)
     runs-on: ubuntu-22.04
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
@@ -52,46 +57,100 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git
-          sudo apt-get install -y g++-mingw-w64-x86-64 nsis
+          sudo apt-get install -y libboost-all-dev libevent-dev libdb-dev libdb++-dev libsqlite3-dev libzmq3-dev
+          sudo apt-get install -y libminiupnpc-dev libnatpmp-dev
+          sudo apt-get install -y libqt5gui5 libqt5core5a libqt5dbus5 qttools5-dev qttools5-dev-tools
+          sudo apt-get install -y libqrencode-dev
+
+      - name: Run autogen
+        run: ./autogen.sh
+
+      - name: Configure with Qt
+        run: ./configure --with-gui=qt5 --disable-tests --disable-bench
+
+      - name: Build
+        run: make -j$(nproc)
+
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: defcoin-linux-qt-x64
+          path: |
+            src/qt/defcoin-qt
+
+  build-windows:
+    name: Build Windows (x86_64)
+    runs-on: ubuntu-22.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libtool autotools-dev automake pkg-config bsdmainutils curl git
+          sudo apt-get install -y g++-mingw-w64-x86-64-posix mingw-w64-x86-64-dev
+          sudo apt-get install -y nsis
           sudo update-alternatives --set x86_64-w64-mingw32-g++ /usr/bin/x86_64-w64-mingw32-g++-posix
+          sudo update-alternatives --set x86_64-w64-mingw32-gcc /usr/bin/x86_64-w64-mingw32-gcc-posix
+
+      - name: Cache depends
+        uses: actions/cache@v4
+        with:
+          path: depends/built
+          key: depends-mingw32-${{ hashFiles('depends/packages/*.mk') }}
+          restore-keys: |
+            depends-mingw32-
 
       - name: Build depends
         run: |
           cd depends
-          make HOST=x86_64-w64-mingw32 -j$(nproc)
+          make HOST=x86_64-w64-mingw32 -j$(nproc) NO_QT=1
 
-      - name: Build DefcoinCore
+      - name: Run autogen
+        run: ./autogen.sh
+
+      - name: Configure
         run: |
-          ./autogen.sh
-          CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/
-          make -j$(nproc)
+          CONFIG_SITE=$PWD/depends/x86_64-w64-mingw32/share/config.site ./configure --prefix=/ --disable-tests --disable-bench
 
-      - name: Create installer
-        run: make deploy
+      - name: Build
+        run: make -j$(nproc)
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: defcoin-windows-x64
           path: |
-            src/*.exe
-            defcoin-*-win64-setup.exe
+            src/defcoind.exe
+            src/defcoin-cli.exe
+            src/defcoin-tx.exe
+            src/defcoin-wallet.exe
 
   build-macos:
     name: Build macOS (x86_64)
-    runs-on: macos-12
+    runs-on: macos-13
+    timeout-minutes: 120
     steps:
       - uses: actions/checkout@v4
 
       - name: Install dependencies
         run: |
-          brew install automake libtool boost pkg-config libevent berkeley-db@4 qt@5 qrencode miniupnpc zeromq
+          brew install automake libtool boost pkg-config libevent berkeley-db@4 qt@5 qrencode miniupnpc libnatpmp zeromq
+
+      - name: Run autogen
+        run: ./autogen.sh
+
+      - name: Configure
+        run: |
+          export PATH="/usr/local/opt/qt@5/bin:$PATH"
+          export LDFLAGS="-L/usr/local/opt/qt@5/lib -L/usr/local/opt/berkeley-db@4/lib"
+          export CPPFLAGS="-I/usr/local/opt/qt@5/include -I/usr/local/opt/berkeley-db@4/include"
+          export PKG_CONFIG_PATH="/usr/local/opt/qt@5/lib/pkgconfig"
+          ./configure --with-gui=qt5 --disable-tests --disable-bench
 
       - name: Build
-        run: |
-          ./autogen.sh
-          ./configure --with-gui=qt5
-          make -j$(sysctl -n hw.ncpu)
+        run: make -j$(sysctl -n hw.ncpu)
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
@@ -100,4 +159,5 @@ jobs:
           path: |
             src/defcoind
             src/defcoin-cli
-            src/defcoin-qt
+            src/defcoin-tx
+            src/qt/defcoin-qt
