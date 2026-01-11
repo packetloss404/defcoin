@@ -55,4 +55,12 @@ static constexpr uint64_t GB_BYTES{1000000000};
 // Default prune target displayed in GUI.
 static constexpr int DEFAULT_PRUNE_TARGET_GB{2};
 
+/* Theme options */
+enum AppTheme {
+    THEME_SYSTEM = 0,
+    THEME_LIGHT = 1,
+    THEME_DARK = 2
+};
+static constexpr int DEFAULT_THEME = THEME_DARK;
+
 #endif // BITCOIN_QT_GUICONSTANTS_H

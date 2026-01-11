@@ -44,10 +44,12 @@
 
 #include <QApplication>
 #include <QDebug>
+#include <QFile>
 #include <QLibraryInfo>
 #include <QLocale>
 #include <QMessageBox>
 #include <QSettings>
+#include <QTextStream>
 #include <QThread>
 #include <QTimer>
 #include <QTranslator>
@@ -225,6 +227,32 @@ void BitcoinApplication::setupPlatformStyle()
     assert(platformStyle);
 }
 
+void BitcoinApplication::loadTheme(int theme)
+{
+    QString stylesheetPath;
+    switch (theme) {
+        case THEME_LIGHT:
+            stylesheetPath = ":/styles/light";
+            break;
+        case THEME_DARK:
+            stylesheetPath = ":/styles/dark";
+            break;
+        case THEME_SYSTEM:
+        default:
+            // System theme - clear stylesheet to use native style
+            setStyleSheet("");
+            return;
+    }
+
+    QFile file(stylesheetPath);
+    if (file.open(QFile::ReadOnly | QFile::Text)) {
+        QTextStream stream(&file);
+        QString stylesheet = stream.readAll();
+        setStyleSheet(stylesheet);
+        file.close();
+    }
+}
+
 BitcoinApplication::~BitcoinApplication()
 {
     if(coreThread)
@@ -251,6 +279,10 @@ void BitcoinApplication::createPaymentServer()
 void BitcoinApplication::createOptionsModel(bool resetSettings)
 {
     optionsModel = new OptionsModel(this, resetSettings);
+    // Load initial theme from settings
+    loadTheme(optionsModel->getTheme());
+    // Connect theme change signal for live switching
+    connect(optionsModel, &OptionsModel::themeChanged, this, &BitcoinApplication::loadTheme);
 }
 
 void BitcoinApplication::createWindow(const NetworkStyle *networkStyle)

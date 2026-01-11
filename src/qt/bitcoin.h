@@ -89,6 +89,8 @@ public:
 
     /// Setup platform style
     void setupPlatformStyle();
+    /// Load and apply theme stylesheet
+    void loadTheme(int theme);
 
     interfaces::Node& node() const { assert(m_node); return *m_node; }
     void setNode(interfaces::Node& node);
