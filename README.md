@@ -46,9 +46,9 @@ Defcoin Core 2.0.0 is a major upgrade rebased from Litecoin 0.15.x to Litecoin 0
 
 ### Wallet Improvements
 - **Descriptor wallets**: Modern wallet architecture (optional)
-- **Native SegWit by default**: Lower fees with bech32 addresses (dfc1...)
 - **Improved coin selection**: Smarter UTXO management
 - **Hardware wallet support**: Better integration with external signers
+- **Full backward compatibility**: Your existing wallet.dat works without changes
 
 ### Network & Protocol
 - **Updated P2P protocol**: More efficient peer communication
